@@ -32,9 +32,9 @@ def adminLogin(request):
 @login_required(login_url='admin-login')
 def adminDashboard(request):
     paitentUsers = User.objects.filter(
-        Q(isApproved=1) & Q(userType=1) & Q(isDeleted=False))[:2]
+        Q(isDeleted=False))[:2]
     providersUsers = User.objects.filter(
-        Q(isApproved=1) & Q(userType=2) & Q(isDeleted=False))[:2]
+        Q(isDeleted=False))[:2]
     context = {
         "patientUsers": paitentUsers,
         "providersUsers": providersUsers
@@ -51,8 +51,7 @@ class ProviderUserRequest(ListView, LoginRequiredMixin):
     model = User
     paginate_by = 20
     template_name = 'userManagement/providerUserRequests.html'
-    queryset = User.objects.filter(Q(userType=2) & Q(
-        isDeleted=False) & Q(isApproved__in=[1, 3])).order_by('-id')
+    queryset = User.objects.filter(Q(isDeleted=False) & Q(isApproved__in=[1, 3])).order_by('-id')
     context_object_name = 'providerUsers'
     login_url = 'admin-login'
 
@@ -73,8 +72,7 @@ def searchUserRequest(request):
         query1 = Q(fullName__icontains=search_key) | Q(
             email__icontains=search_key) | Q(
             mobileNo__icontains=search_key)
-        users = User.objects.filter((Q(query1) & Q(userType=2) & Q(
-            isDeleted=False) & Q(isApproved__in=[1, 3]))).all()
+        users = User.objects.filter((Q(query1) & Q(isDeleted=False) & Q(isApproved__in=[1, 3]))).all()
         paginator = Paginator(users, 20)
         page = request.GET.get('page')
         page_obj = paginator.get_page(page)
@@ -89,8 +87,7 @@ def searchUserRequest(request):
     
 def filterByStatus(request):
     status = request.POST.get('filter_status_id')
-    users = User.objects.filter(Q(userType=2) & Q(
-            isDeleted=False) & Q(isApproved = status)).all()
+    users = User.objects.filter(Q(isDeleted=False) & Q(isApproved = status)).all()
     paginator = Paginator(users, 20)
     page = request.GET.get('page')
     page_obj = paginator.get_page(page)
@@ -105,7 +102,6 @@ class ProviderApprovedUsers(ListView, LoginRequiredMixin):
     model = User
     paginate_by = 20
     template_name = 'userManagement/providerApprovedUsers.html'
-    queryset = User.objects.filter(Q(userType=2) & Q(
-        isDeleted=False) & Q(isApproved =2)).order_by('-id')
+    queryset = User.objects.filter(Q(isDeleted=False) & Q(isApproved =2)).order_by('-id')
     context_object_name = 'approvedUsers'
     login_url = 'admin-login'

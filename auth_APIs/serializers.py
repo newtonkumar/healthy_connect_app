@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import User, licenseType
+from .models import User
 from django.contrib.auth.hashers import make_password
 
 
@@ -7,7 +7,7 @@ class UserRegistrationSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'firstName', 'lastName', 'fullName', 'password', 'email',
-                  'mobileNo', 'profileImage', 'deviceType', 'userType', 'genderType', 'lat', 'lng', 'zipCode',
+                  'mobileNo', 'profileImage', 'deviceType', 'genderType', 'lat', 'lng', 'zipCode',
                   'dateOfBirth']
         extra_kwargs = {'password': {'write_only': True}}
 
@@ -44,7 +44,6 @@ class UserRegistrationSerializer(ModelSerializer):
             password=make_password(validated_data['password']),
             mobileNo=mobileNo,
             deviceType=validated_data['deviceType'],
-            userType=validated_data['userType'],
             genderType=genderType,
             lat=lat,
             lng=lng,
@@ -52,9 +51,3 @@ class UserRegistrationSerializer(ModelSerializer):
             dateOfBirth=validated_data['dateOfBirth']
         )
         return user
-
-
-class LicenseTypeSerializer(ModelSerializer):
-    class Meta:
-        model = licenseType
-        fields = ['id', 'licenseTypeName']
