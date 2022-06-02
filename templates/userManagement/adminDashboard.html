@@ -1,0 +1,166 @@
+{% extends 'base/base.html' %}
+{% block title %}Dashboard{% endblock title %}
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Dashboard
+      </h1>
+      {% comment %} <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol> {% endcomment %}
+    </section>
+
+    <!-- Main content -->
+    <section class="content" id="dashboard-1">
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-white">
+            <div class="row">
+              <div class="col-md-4">
+                <img src="/static/assets/dist/img/icon-1.png">
+              </div>
+              <div class="inner">
+                <div class="col-md-8">
+                  <h4>12K+</h4>
+                  <p>Total Consultation</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-white">
+            <div class="row">
+              <div class="col-md-4">
+                <img src="/static/assets/dist/img/icon-2.png">
+              </div>
+              <div class="inner">
+                <div class="col-md-8">
+                  <h4>160+</h4>
+                  <p>Provider Registration</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-white">
+            <div class="row">
+              <div class="col-md-4">
+                <img src="/static/assets/dist/img/icon-3.png">
+              </div>
+              <div class="inner">
+                <div class="col-md-8">
+                  <h4>200+</h4>
+                  <p>Patient Registration</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ./col -->
+        <div class="col-lg-3 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-white">
+            <div class="row">
+              <div class="col-md-4">
+                <img src="/static/assets/dist/img/icon-4.png">
+              </div>
+              <div class="inner">
+                <div class="col-md-8">
+                  <h4>$14200</h4>
+                  <p>Total Revenue</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ./col -->
+      </div>
+      <!-- /.row -->
+
+    </section>
+    <!-- /.content -->
+    <section class="content" id="dashboard-2">
+      <div class="box">
+        <div class="box-header"> <span class="view-txt"><a href="#">View All</a></span>
+          <h3 class="box-title">Provider User Request </h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+          <table class="table table-condensed">
+            <tr>
+              <th>Sr No.</th>
+              <th>Provider Name</th>
+              <th>Email</th>
+              <th>License Type</th>
+              <th>Actions</th>
+            </tr>
+            {% if patientUsers%}
+                {% for user in patientUsers%}
+                    <tr>
+                    <td>01</td>
+                    <td>Brooklyn Simmons</td>
+                    <td>dolores.chambers@example.com</td>
+                    <td><span class="blue-txt">#DC457368124</span></td>
+                    <td><a type="button" class="btn btn-reject">Reject</a> <span class="btn-2"><a type="button" class="btn btn-accept">Accept</a></span> <span class="btn-3"><a type="button" class="btn btn-view">View Details</a></span></td>
+                    </tr>
+                {% endfor%}
+            {% else%}
+                <tr><span>Requests not available</span></tr>
+            {% endif%}
+   
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </section>
+
+    <section class="content" id="dashboard-3">
+      <div class="box">
+        <div class="box-header"> <span class="view-txt"><a href="#">View All</a></span>
+          <h3 class="box-title">Patient User Management</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+          <table class="table table-condensed">
+            <tr>
+              <th>Sr No.</th>
+              <th>Patient Name</th>
+              <th>Email</th>
+              <th>Mobile Number</th>
+              <th>Actions</th>
+            </tr>
+            <tr>
+              <td>01</td>
+              <td>Brooklyn Simmons</td>
+              <td>dolores.chambers@example.com</td>
+              <td>(480) 555-0103</td>
+              <td><a type="button" class="btn btn-view">View Details</a></td>
+            </tr>
+            <tr>
+              <td>02</td>
+              <td>Brooklyn Simmons</td>
+              <td>dolores.chambers@example.com</td>
+              <td>(480) 555-0103</td>
+              <td><a type="button" class="btn btn-view">View Details</a></td>
+            </tr>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </section>
+  </div>
+
+{% endblock%}

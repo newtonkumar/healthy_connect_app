@@ -1,0 +1,38 @@
+<!doctype html>
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}{% endblock title %}</title>
+    <meta name="description" content="Skintone-Admin">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
+    <link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png"> -->
+    {% include 'base/css.html' %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+        {% include 'base/header.html' %}
+        {% include 'base/sidebar.html' %}
+        {% block breadcrumbs %}
+        {% endblock breadcrumbs %}
+        {% block content %}
+        {% endblock content %}
+        {% comment %} {% include 'base/footer.html' %} {% endcomment %}
+        {% include 'base/script.html' %}
+        {% block script %}
+        {% endblock script %}
+  </div>
+
+  
+ </body>
+</html>
+
+
+
+
+
+
+

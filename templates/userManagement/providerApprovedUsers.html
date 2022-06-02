@@ -1,0 +1,68 @@
+{% extends 'base/base.html' %}
+{% block title %}Provider User Requests{% endblock title %}
+{% block content %}
+{% load rizwan_dev_tags %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Approved User
+        </h1>
+
+    </section>
+    <!-- /.content -->
+    <section class="content" id="dashboard-2">
+        <div class="box">
+            <div class="box-header">
+                <span class="refresh"><button class="btn" onclick="location.href='{% url 'provider-usr-requests'%}'"><img src="/static/assets/dist/img/refresh.png"></button></span>
+                <span class="sort-section">
+                    <select id="type_id">
+                      <option value="" disabled selected>Filter by Status</option>
+                      <option value="1" style="color:orange;" {% if SelectedType == "1"%} selected {% endif%}>Pending</option>
+                      <option value="3" style="color:red;" {% if SelectedType == "3"%} selected {% endif%}>Rejected</option>
+                    </select>
+                </span>
+                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search Provider"
+                    title="Type in a name">
+                <h3 class="box-title">Approved User</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+                <table class="table table-condensed">
+                    <tr>
+                        <th>Sr No.</th>
+                        <th>Provider Name</th>
+                        <th>Email</th>
+                        <th>Mobile Number</th>
+                        <th>License Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    {% if approvedUsers%}
+                        {% for user in approvedUsers%}
+                            <tr>
+                                <td>01</td>
+                                <td>Brooklyn Simmons</td>
+                                <td>dolores.chambers@example.com</td>
+                                <td>(480) 555-0103</td>
+                                <td><span class="blue-txt">PMHNP</span></td>
+                                <td class="status-approve">Approved</td>
+                                <td class="btn-section"><a type="button" class="btn btn-unblock">Unblock</a> <span
+                                        class="btn-2"><a type="button" class="btn btn-block-1">Block</a></span> <span
+                                        class="btn-3"><a type="button" class="btn btn-view">View Details</a></span></td>
+                            </tr>
+                        {% endfor%}
+                    {% else%}
+                        <td><span>Users Not Available</span></td>
+                    {% endif%}
+        
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </section>
+
+</div>
+
+{% endblock content%}

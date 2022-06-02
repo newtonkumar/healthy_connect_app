@@ -1,0 +1,114 @@
+{% extends 'base/base.html' %}
+{% block title %}Provider User Requests{% endblock title %}
+{% block content %}
+{% load rizwan_dev_tags %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Provider Users
+      </h1>
+    </section>
+    {% if messages %}
+      {% for message in messages%}
+        <div class="alert alert-{{message.tags}} text-center" id='hidemessage' role="alert">
+          {{message}}
+        </div>
+      {% endfor %}
+    {% endif %}
+    <!-- /.content -->
+    <section class="content" id="dashboard-2">
+      <div class="box">
+        <div class="box-header">
+            <span class="refresh"><button class="btn" onclick="location.href='{% url 'provider-usr-requests'%}'"><img src="/static/assets/dist/img/refresh.png"></button></span>
+            <span class="sort-section">
+              <select id="type_id">
+                <option value="" disabled selected>Filter by Status</option>
+                <option value="1" style="color:orange;" {% if SelectedType == "1"%} selected {% endif%}>Pending</option>
+                <option value="3" style="color:red;" {% if SelectedType == "3"%} selected {% endif%}>Rejected</option>
+              </select>
+            </span>
+            <form method="POST" action="{% url 'provider-search'%}">
+              {% csrf_token %}
+              <input type="text" id="myInput" onkeyup="myFunction()" name="q" {% if InputText%} value="{{InputText}}" {% endif%} placeholder="Search Provider" title="Type in a name">
+            </form> 
+          <h3 class="box-title">Provider User Request</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+          <table class="table table-condensed">
+            <tr>
+              <th>Id</th>
+              <th>Provider Name</th>
+              <th>Email</th>
+              <th>Mobile Number</th>
+              <th>License Type</th>
+              <th>Status</th>
+              <th style="text-align:center">Actions</th>
+            </tr>
+            {% if providerUsers%}
+                {% for user in providerUsers%}
+                    <tr>
+                        <td>{{user.id}}</td>
+                        <td>{{user.fullName}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.mobileNo}}</td>
+                        <td><span class="blue-txt">{% licenseTypeDetails user.id as addtionalData%}
+                          {{addtionalData.licenseTypeId.licenseTypeName}}</span>
+                        </td>
+                        {% if user.isApproved == 1%}
+                            <td class="status-pending">Pending</td>
+                        {% else%}
+                            <td class="status-reject">Rejected</td>
+                        {% endif%}
+                        <td class="btn-section">
+                          <a href="{% url 'change-status-user' 3 user.id %}" class="btn btn-reject">Reject</a>
+                          <span class="btn-2"><a href="{% url 'change-status-user' 2 user.id %}" class="btn btn-accept">Accept</a></span>
+                          <span class="btn-3"><a type="button" class="btn btn-view">View Details</a></span>
+                        </td>
+                    </tr>
+                {% endfor%}
+            {% else%}
+                <td><span>Users Not Available</span></td>
+            {% endif%}
+          </table>
+        </div>
+     
+        <!-- /.box-body -->
+      </div>
+      <div class="box-footer">
+        <div class="box-tools" style="margin-left: 45%;">
+          <ul class="pagination pagination-sm inline">
+            {% if page_obj.has_previous %}
+              <li><a href="?page=1" >&laquo; First</a></li>
+              <li><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}&nbsp
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            {% if page_obj.has_next %}
+              <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+              <li><a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+            {% endif %}
+          </ul>
+        </div>
+    </div>
+      <!-- /.box -->
+    </section>
+    
+
+  </div>
+<form name="filter-form" id="type_id_form" method="POST" action="{% url 'filter-by-status'%}">
+  {% csrf_token%}
+<input type="hidden" name="filter_status_id" id="filter_val_status">
+{% endblock content%}
+{% block script%}
+  <script>
+    setTimeout(function(){
+      $('#hidemessage').hide()
+    }, 3000);
+    $('#type_id').on('change',function(){  
+      var val = $('#type_id').val();
+      $('#filter_val_status').attr('value',val);
+      $('#type_id_form').submit();
+    });
+  </script>
+{% endblock script%}

@@ -1,0 +1,53 @@
+{% include 'base/script.html' %}
+{% include 'base/css.html' %}
+<title>Admin Login</title>
+{% block content %}
+<section class="login-page-1">
+    <div class="container">
+        <div class="row" id="view-1">
+                <div class="col-12 col-lg-12 col-md-12 col-sm-12" style="text-align:center;">
+                 
+                    <div class="view-2">
+                        {% if messages %}
+                            {% for message in messages%}
+                            <div class="alert alert-{{message.tags}} text-center" id='hidemessage' role="alert">
+                                {{message}}
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="logo">
+                            <img src="/static/assets/dist/img/logo-1.png" class="img-fluid">
+                        </div>
+                        <p>Welcome to Sotto, Please enter the details below to<br> continue with us.</p>
+                        <form id = "admin-login-page-form" method="POST">
+                            {% csrf_token %}
+                           
+                            <div class="form-group has-feedback">
+                              <input type="email" class="form-control" name="email" placeholder="Email">
+                            </div>
+                            <div class="form-group has-feedback">
+                              <input type="password" class="form-control" name="password" placeholder="Password">
+                            </div>
+                        
+                            <div class="row">
+                              <button type="submit" class="btn btn-primary btn-flat">Login</button>
+                            </div>
+
+                            <p class="frgt-psswrd">Forgot password?</p>
+                            
+                            {% comment %} <p class="frgt-txt"><a id="forget-text" href="{% url 'admin-forget-password'%}">Forgot Password</a></p> {% endcomment %}
+                            </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock content%}
+{% block script%}
+    <script type="text/javascript" src="/static/assets/dist/js/form_validate.js"></script>
+    <script>
+        setTimeout(function(){
+            $('#hidemessage').hide()
+          }, 4000)
+    </script>
+{% endblock script%}
