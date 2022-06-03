@@ -1,14 +1,17 @@
 from rest_framework.serializers import ModelSerializer
 from .models import User
 from django.contrib.auth.hashers import make_password
+import json
 
 
 class UserRegistrationSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'firstName', 'lastName', 'fullName', 'password', 'email',
-                  'mobileNo', 'profileImage', 'deviceType', 'genderType', 'lat', 'lng', 'zipCode',
-                  'dateOfBirth']
+                  'mobileNo', 'profileImage', 'deviceType', 'gender', 'lat', 'lng', 'zipCode',
+                  'dob', 'phoneNumberCountryCode', 'age', 'activityLevel', 'height', 'currentWeight',
+                  'goalWeight', 'hobbies', 'goals', 'workoutPreferences', 'dietaryPreferences'
+                  ]
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -21,10 +24,10 @@ class UserRegistrationSerializer(ModelSerializer):
         else:
             mobileNo = None
 
-        if "genderType" in validated_data:
-            genderType = validated_data['genderType']
+        if "gender" in validated_data:
+            gender = validated_data['gender']
         else:
-            genderType = None
+            gender = None
 
         if "lat" in validated_data:
             lat = validated_data['lat']
@@ -36,18 +39,33 @@ class UserRegistrationSerializer(ModelSerializer):
         else:
             lng = None
 
+        if "goals" in validated_data:
+            goals = validated_data['goals']
+        else:
+            goals = None
+
         user = User.objects.create(
             firstName=validated_data['firstName'],
             lastName=validated_data['lastName'],
             fullName=validated_data["fullName"],
             email=validated_data['email'],
             password=make_password(validated_data['password']),
+            phoneNumberCountryCode=validated_data['phoneNumberCountryCode'],
+            age=validated_data['age'],
+            activityLevel=validated_data['activityLevel'],
+            height=validated_data['height'],
+            currentWeight=validated_data['currentWeight'],
+            goalWeight=validated_data['goalWeight'],
+            hobbies=validated_data['hobbies'],
+            goals=goals,
+            workoutPreferences=validated_data['workoutPreferences'],
+            dietaryPreferences=validated_data['dietaryPreferences'],
             mobileNo=mobileNo,
             deviceType=validated_data['deviceType'],
-            genderType=genderType,
+            gender=gender,
             lat=lat,
             lng=lng,
             zipCode=validated_data["zipCode"],
-            dateOfBirth=validated_data['dateOfBirth']
+            dob=validated_data['dob']
         )
         return user

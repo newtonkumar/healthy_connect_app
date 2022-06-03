@@ -110,6 +110,14 @@ class UserRegistrationView(CreateAPIView):
                 return Response(response, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
             pythonData["lat"] = resData.latitude
             pythonData['lng'] = resData.longitude
+
+            pythonData["goals"] = str(
+                pythonData["goal1"] + ", " + pythonData["goal2"] + ", " + pythonData["goal3"])
+
+            pythonData["hobbies"] = "," .join(map(str, pythonData['hobbies']))
+            pythonData["workoutPreferences"] = ",".join(map(str, pythonData['workoutPreferences']))
+            pythonData["dietaryPreferences"] = ",".join(map(str, pythonData['dietaryPreferences']))
+
             serializer = UserRegistrationSerializer(data=pythonData)
             if serializer.is_valid(raise_exception=True):
                 user = serializer.save()
@@ -120,7 +128,7 @@ class UserRegistrationView(CreateAPIView):
                         "lastName": user.lastName,
                         "mobileNo": user.mobileNo,
                         "email": user.email,
-                        "gender": user.genderType,
+                        "gender": user.gender,
                         "token": str(RefreshToken.for_user(user).access_token)
                     }
                     response = {
