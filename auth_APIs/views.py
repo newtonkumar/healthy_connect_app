@@ -253,17 +253,7 @@ class UserLoginView(RetrieveAPIView):
                     "response": None
                 }
                 return Response(response, status=status.HTTP_401_UNAUTHORIZED)
-            if user.isApproved == 1:
-                response = {
-                    "error": {
-                        "errorCode": 509,
-                        "statusCode": status.HTTP_401_UNAUTHORIZED,
-                        "errorMessage": "Your account is not approved. Please wait till complete verification. And try again later."
-                    },
-                    "response": None
-                }
-                return Response(response, status=status.HTTP_401_UNAUTHORIZED)
-
+            
             if user.isApproved == 3:
                 response = {
                     "error": {
