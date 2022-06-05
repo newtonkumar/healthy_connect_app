@@ -1,7 +1,8 @@
 from rest_framework.serializers import ModelSerializer
-from .models import User, Hobbies, GoalSettings, DietaryPreferences, WorkoutPreferences
+from .models import User, Hobbies, GoalSettings, DietaryPreferences, WorkoutPreferences, \
+    UserHobbies, UserGoalSettings, UserWorkoutPreferences, UserDietaryPreferences
 from django.contrib.auth.hashers import make_password
-import json
+from rest_framework import serializers
 
 
 class UserRegistrationSerializer(ModelSerializer):
@@ -69,7 +70,7 @@ class UserRegistrationSerializer(ModelSerializer):
 class HobbiesSerializer(ModelSerializer):
     class Meta:
         model = Hobbies
-        fields = ['id', 'hobby', 'isActive']
+        fields = ['hobby']
 
 
 class GoalSettingsSerializer(ModelSerializer):
@@ -88,4 +89,43 @@ class DietaryPreferencesSerializer(ModelSerializer):
     class Meta:
         model = DietaryPreferences
         fields = ['id', 'preference', 'isActive']
+
+
+class UserHobbiesSerializer(ModelSerializer):
+    class Meta:
+        model = UserHobbies
+        fields = ['hobbyId']
+
+
+class UserGoalSettingsSerializer(ModelSerializer):
+    class Meta:
+        model = UserGoalSettings
+        fields = ['goalSettingsId']
+
+
+class UserWorkoutPreferencesSettingsSerializer(ModelSerializer):
+    class Meta:
+        model = UserWorkoutPreferences
+        fields = ['workoutPreferencesId']
+
+
+class UserDietaryPreferencesSerializer(ModelSerializer):
+    class Meta:
+        model = UserDietaryPreferences
+        fields = ['dietaryPreferencesId']
+
+
+class UserDetailsSerializer(ModelSerializer):
+    UserHobbyData = UserHobbiesSerializer(many=True, read_only=True)
+    UserGoalData = UserGoalSettingsSerializer(many=True, read_only=True)
+    UserWorkoutData = UserWorkoutPreferencesSettingsSerializer(many=True, read_only=True)
+    UserDietaryData = UserDietaryPreferencesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'firstName', 'lastName', 'fullName', 'password', 'email', 'mobileNo', 'profileImage',
+                  'deviceType', 'gender', 'lat', 'lng', 'zipCode', 'dob', 'phoneNumberCountryCode', 'age',
+                  'activityLevel', 'height', 'currentWeight', 'goalWeight', 'UserHobbyData', 'UserGoalData',
+                  'UserWorkoutData', 'UserDietaryData'
+                  ]
 

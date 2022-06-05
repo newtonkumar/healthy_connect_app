@@ -1,5 +1,5 @@
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import JSONParser
 import io
 from rest_framework import status
@@ -8,12 +8,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from auth_APIs.models import User, Hobbies, UserHobbies, GoalSettings, UserGoalSettings, \
     WorkoutPreferences, UserWorkoutPreferences, DietaryPreferences, UserDietaryPreferences
 from .serializers import UserRegistrationSerializer, HobbiesSerializer, GoalSettingsSerializer, \
-    WorkoutPreferencesSerializer, DietaryPreferencesSerializer
+    WorkoutPreferencesSerializer, DietaryPreferencesSerializer, UserDetailsSerializer
 import pgeocode
 import math
 from django.db.models import Q
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth.hashers import make_password
+from django.shortcuts import get_object_or_404
 
 
 class UserRegistrationView(CreateAPIView):
@@ -268,7 +269,7 @@ class UserLoginView(RetrieveAPIView):
                     "response": None
                 }
                 return Response(response, status=status.HTTP_401_UNAUTHORIZED)
-            
+
             if user.isApproved == 3:
                 response = {
                     "error": {
@@ -394,3 +395,26 @@ class ForgetPasswordUpdate(UpdateAPIView):
                 "response": None
             }
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserDetailsView(RetrieveAPIView):
+    permission_classes = (AllowAny,)
+
+    def get(self, request, pk):
+        queryset = User.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = UserDetailsSerializer(user)
+
+        response = {
+            "error": None,
+            "response": {
+                "data": serializer.data,
+                "message": {
+                    'success': True,
+                    "successCode": 102,
+                    "statusCode": status.HTTP_200_OK,
+                    "successMessage": "User Detail successfully."
+                }
+            }
+        }
+        return Response(response, status=status.HTTP_200_OK)
