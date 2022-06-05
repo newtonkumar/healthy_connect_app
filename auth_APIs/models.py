@@ -14,7 +14,9 @@ class CustomAccountManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password, **other_fields):
+        other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
+        other_fields.setdefault('is_active', True)
 
         return self.create_user(email, password, **other_fields)
 
@@ -57,6 +59,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         choices=userApprovalStatus, null=False, default=1)
     createdAt = models.DateTimeField(default=now, editable=False)
     updatedAt = models.DateTimeField(default=now, editable=False)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['firstName', 'lastName', 'mobileNo']
     objects = CustomAccountManager()
