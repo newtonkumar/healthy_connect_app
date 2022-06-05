@@ -6,6 +6,7 @@ class Hobbies(models.Model):
         db_table = 'hobbies'
 
     hobby = models.CharField(max_length=50)
+    isActive = models.BooleanField(default=True)
 
     def __str__(self):
         return self.hobby
@@ -26,6 +27,7 @@ class WorkoutPreferences(models.Model):
         db_table = 'workout_preferences'
 
     preference = models.CharField(max_length=255)
+    isActive = models.BooleanField(default=True)
 
     def __str__(self):
         return self.preference
@@ -36,6 +38,7 @@ class DietaryPreferences(models.Model):
         db_table = 'dietary_preferences'
 
     preference = models.CharField(max_length=255)
+    isActive = models.BooleanField(default=True)
 
     def __str__(self):
         return self.preference

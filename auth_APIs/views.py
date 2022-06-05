@@ -5,8 +5,10 @@ import io
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from auth_APIs.models import User
-from .serializers import UserRegistrationSerializer
+from auth_APIs.models import User, Hobbies, UserHobbies, GoalSettings, UserGoalSettings, \
+    WorkoutPreferences, UserWorkoutPreferences, DietaryPreferences, UserDietaryPreferences
+from .serializers import UserRegistrationSerializer, HobbiesSerializer, GoalSettingsSerializer, \
+    WorkoutPreferencesSerializer, DietaryPreferencesSerializer
 import pgeocode
 import math
 from django.db.models import Q
@@ -26,6 +28,10 @@ class UserRegistrationView(CreateAPIView):
             mobileNo = pythonData.get('mobileNo', False)
             password = pythonData.get('password', False)
             zipCode = pythonData.get('zipCode')
+            userHobbies = pythonData.get('hobbies')
+            userGoals = pythonData.get('goals')
+            userWorkoutPreferences = pythonData.get('workoutPreferences')
+            userDietaryPreferences = pythonData.get('dietaryPreferences')
 
             userCheck = User.objects.filter(
                 Q(email=email) | Q(mobileNo=mobileNo)).first()
@@ -111,17 +117,26 @@ class UserRegistrationView(CreateAPIView):
             pythonData["lat"] = resData.latitude
             pythonData['lng'] = resData.longitude
 
-            pythonData["goals"] = str(
-                pythonData["goal1"] + ", " + pythonData["goal2"] + ", " + pythonData["goal3"])
-
-            pythonData["hobbies"] = "," .join(map(str, pythonData['hobbies']))
-            pythonData["workoutPreferences"] = ",".join(map(str, pythonData['workoutPreferences']))
-            pythonData["dietaryPreferences"] = ",".join(map(str, pythonData['dietaryPreferences']))
-
             serializer = UserRegistrationSerializer(data=pythonData)
             if serializer.is_valid(raise_exception=True):
                 user = serializer.save()
                 if user is not None:
+                    for hobbyId in userHobbies:
+                        userHobby = Hobbies.objects.filter(id=hobbyId).first()
+                        UserHobbies.objects.create(userId=user, hobbyId=userHobby)
+
+                    for goalId in userGoals:
+                        userGoalSetting = GoalSettings.objects.filter(id=goalId).first()
+                        UserGoalSettings.objects.create(userId=user, goalSettingsId=userGoalSetting)
+
+                    for dietPreId in userDietaryPreferences:
+                        userDietPre = DietaryPreferences.objects.filter(id=dietPreId).first()
+                        UserDietaryPreferences.objects.create(userId=user, dietaryPreferencesId=userDietPre)
+
+                    for workoutPreId in userWorkoutPreferences:
+                        userWorkoutPre = WorkoutPreferences.objects.filter(id=workoutPreId).first()
+                        UserWorkoutPreferences.objects.create(userId=user, workoutPreferencesId=userWorkoutPre)
+
                     data = {
                         "userId": user.id,
                         "firstName": user.firstName,

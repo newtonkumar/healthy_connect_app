@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import User
+from .models import User, Hobbies, GoalSettings, DietaryPreferences, WorkoutPreferences
 from django.contrib.auth.hashers import make_password
 import json
 
@@ -7,10 +7,9 @@ import json
 class UserRegistrationSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'firstName', 'lastName', 'fullName', 'password', 'email',
-                  'mobileNo', 'profileImage', 'deviceType', 'gender', 'lat', 'lng', 'zipCode',
-                  'dob', 'phoneNumberCountryCode', 'age', 'activityLevel', 'height', 'currentWeight',
-                  'goalWeight', 'hobbies', 'goals', 'workoutPreferences', 'dietaryPreferences'
+        fields = ['id', 'firstName', 'lastName', 'fullName', 'password', 'email', 'mobileNo', 'profileImage',
+                  'deviceType', 'gender', 'lat', 'lng', 'zipCode', 'dob', 'phoneNumberCountryCode', 'age',
+                  'activityLevel', 'height', 'currentWeight', 'goalWeight'
                   ]
         extra_kwargs = {'password': {'write_only': True}}
 
@@ -56,10 +55,6 @@ class UserRegistrationSerializer(ModelSerializer):
             height=validated_data['height'],
             currentWeight=validated_data['currentWeight'],
             goalWeight=validated_data['goalWeight'],
-            hobbies=validated_data['hobbies'],
-            goals=goals,
-            workoutPreferences=validated_data['workoutPreferences'],
-            dietaryPreferences=validated_data['dietaryPreferences'],
             mobileNo=mobileNo,
             deviceType=validated_data['deviceType'],
             gender=gender,
@@ -69,3 +64,28 @@ class UserRegistrationSerializer(ModelSerializer):
             dob=validated_data['dob']
         )
         return user
+
+
+class HobbiesSerializer(ModelSerializer):
+    class Meta:
+        model = Hobbies
+        fields = ['id', 'hobby', 'isActive']
+
+
+class GoalSettingsSerializer(ModelSerializer):
+    class Meta:
+        model = GoalSettings
+        fields = ['id', 'goal']
+
+
+class WorkoutPreferencesSerializer(ModelSerializer):
+    class Meta:
+        model = WorkoutPreferences
+        fields = ['id', 'preference', 'isActive']
+
+
+class DietaryPreferencesSerializer(ModelSerializer):
+    class Meta:
+        model = DietaryPreferences
+        fields = ['id', 'preference', 'isActive']
+
