@@ -2,6 +2,7 @@ from statistics import mode
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin, AbstractUser
+from userManagement.models import Hobbies, GoalSettings, WorkoutPreferences, DietaryPreferences
 
 
 class CustomAccountManager(BaseUserManager):
@@ -70,3 +71,50 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = 'users'
+
+
+class UserHobbies(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='UserHobbyData', db_column='userId')
+    hobbyId = models.ForeignKey(Hobbies, on_delete=models.CASCADE, related_name='HobbyData', db_column='hobbyId')
+
+    def __str__(self):
+        return self.userId
+
+    class Meta:
+        db_table = 'user_hobbies'
+
+
+class UserGoalSettings(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='UserGoalData', db_column='userId')
+    goalSettingsId = models.ForeignKey(GoalSettings, on_delete=models.CASCADE, related_name='GoalSettingsData',
+                                       db_column='goalSettingsId')
+
+    def __str__(self):
+        return self.userId
+
+    class Meta:
+        db_table = 'user_goal_settings'
+
+
+class UserWorkoutPreferences(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='UserWorkoutData', db_column='userId')
+    workoutPreferencesId = models.ForeignKey(WorkoutPreferences, on_delete=models.CASCADE,
+                                             related_name='WorkoutPreferenceData', db_column='workoutPreferencesId')
+
+    def __str__(self):
+        return self.userId
+
+    class Meta:
+        db_table = 'user_workout_preferences'
+
+
+class UserDietaryPreferences(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='UserDietaryData', db_column='userId')
+    dietaryPreferencesId = models.ForeignKey(DietaryPreferences, on_delete=models.CASCADE,
+                                             related_name='DietaryPreferencesData', db_column='dietaryPreferencesId')
+
+    def __str__(self):
+        return self.userId
+
+    class Meta:
+        db_table = 'user_dietary_preferences'

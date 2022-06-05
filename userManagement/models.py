@@ -11,9 +11,9 @@ class Hobbies(models.Model):
         return self.hobby
 
 
-class GoalSetting(models.Model):
+class GoalSettings(models.Model):
     class Meta:
-        db_table = 'goal_setting'
+        db_table = 'goal_settings'
 
     goal = models.CharField(max_length=50)
 
