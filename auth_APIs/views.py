@@ -5,10 +5,10 @@ import io
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from auth_APIs.models import User, Hobbies, UserHobbies, GoalSettings, UserGoalSettings, \
-    WorkoutPreferences, UserWorkoutPreferences, DietaryPreferences, UserDietaryPreferences
-from .serializers import UserRegistrationSerializer, HobbiesSerializer, GoalSettingsSerializer, \
-    WorkoutPreferencesSerializer, DietaryPreferencesSerializer, UserDetailsSerializer, UserSearchDetailsSerializer
+from userManagement.models import Hobbies, GoalSettings, WorkoutPreferences, DietaryPreferences
+from auth_APIs.models import User, UserHobbies, UserGoalSettings, UserWorkoutPreferences, UserDietaryPreferences
+from .serializers import UserRegistrationSerializer, UserDetailsSerializer, UserSearchDetailsSerializer, \
+    HobbiesSerializer, GoalSettingsSerializer, WorkoutPreferencesSerializer, DietaryPreferencesSerializer
 import pgeocode
 import math
 from django.db.models import Q
@@ -469,3 +469,161 @@ class UserSearchDetailsView(ListCreateAPIView):
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 
+class HobbyListView(ListCreateAPIView):
+    permission_classes = (AllowAny,)
+
+    filter_backends = (filters.SearchFilter,)
+    queryset = Hobbies.objects.all()
+    serializer_class = HobbiesSerializer
+
+    def get(self, request):
+        try:
+            queryset = Hobbies.objects.all()
+            HobbyId = self.request.query_params.get('id', None)
+
+            if HobbyId is not None:
+                queryset = queryset.filter(id=HobbyId)
+
+            serializer = HobbiesSerializer(queryset, many=True)
+            response = {
+                    "error": None,
+                    "response": {
+                        "data": serializer.data,
+                        "message": {
+                            'success': True,
+                            "successCode": 102,
+                            "statusCode": status.HTTP_200_OK
+                        }
+                    }
+                }
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as exception:
+            response = {
+                "error": {
+                    "errorCode": 511,
+                    "statusCode": status.HTTP_400_BAD_REQUEST,
+                    "errorMessage": str(exception)
+                },
+                "response": None
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GoalSettingsListView(ListCreateAPIView):
+    permission_classes = (AllowAny,)
+
+    filter_backends = (filters.SearchFilter,)
+    queryset = GoalSettings.objects.all()
+    serializer_class = GoalSettingsSerializer
+
+    def get(self, request):
+        try:
+            queryset = GoalSettings.objects.all()
+            GoalId = self.request.query_params.get('id', None)
+
+            if GoalId is not None:
+                queryset = queryset.filter(id=GoalId)
+
+            serializer = GoalSettingsSerializer(queryset, many=True)
+            response = {
+                    "error": None,
+                    "response": {
+                        "data": serializer.data,
+                        "message": {
+                            'success': True,
+                            "successCode": 102,
+                            "statusCode": status.HTTP_200_OK
+                        }
+                    }
+                }
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as exception:
+            response = {
+                "error": {
+                    "errorCode": 511,
+                    "statusCode": status.HTTP_400_BAD_REQUEST,
+                    "errorMessage": str(exception)
+                },
+                "response": None
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class WorkoutPreferencesListView(ListCreateAPIView):
+    permission_classes = (AllowAny,)
+
+    filter_backends = (filters.SearchFilter,)
+    queryset = WorkoutPreferences.objects.all()
+    serializer_class = WorkoutPreferencesSerializer
+
+    def get(self, request):
+        try:
+            queryset = WorkoutPreferences.objects.all()
+            WorkoutId = self.request.query_params.get('id', None)
+
+            if WorkoutId is not None:
+                queryset = queryset.filter(id=WorkoutId)
+
+            serializer = WorkoutPreferencesSerializer(queryset, many=True)
+            response = {
+                    "error": None,
+                    "response": {
+                        "data": serializer.data,
+                        "message": {
+                            'success': True,
+                            "successCode": 102,
+                            "statusCode": status.HTTP_200_OK
+                        }
+                    }
+                }
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as exception:
+            response = {
+                "error": {
+                    "errorCode": 511,
+                    "statusCode": status.HTTP_400_BAD_REQUEST,
+                    "errorMessage": str(exception)
+                },
+                "response": None
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DietaryPreferencesListView(ListCreateAPIView):
+    permission_classes = (AllowAny,)
+
+    filter_backends = (filters.SearchFilter,)
+    queryset = DietaryPreferences.objects.all()
+    serializer_class = DietaryPreferencesSerializer
+
+    def get(self, request):
+        try:
+            queryset = DietaryPreferences.objects.all()
+            DietId = self.request.query_params.get('id', None)
+
+            if DietId is not None:
+                queryset = queryset.filter(id=DietId)
+
+            serializer = DietaryPreferencesSerializer(queryset, many=True)
+            response = {
+                    "error": None,
+                    "response": {
+                        "data": serializer.data,
+                        "message": {
+                            'success': True,
+                            "successCode": 102,
+                            "statusCode": status.HTTP_200_OK
+                        }
+                    }
+                }
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as exception:
+            response = {
+                "error": {
+                    "errorCode": 511,
+                    "statusCode": status.HTTP_400_BAD_REQUEST,
+                    "errorMessage": str(exception)
+                },
+                "response": None
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)

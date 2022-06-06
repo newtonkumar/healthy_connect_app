@@ -70,7 +70,7 @@ class UserRegistrationSerializer(ModelSerializer):
 class HobbiesSerializer(ModelSerializer):
     class Meta:
         model = Hobbies
-        fields = ['hobby']
+        fields = ['id', 'hobby', 'isActive']
 
 
 class GoalSettingsSerializer(ModelSerializer):
@@ -103,7 +103,7 @@ class UserGoalSettingsSerializer(ModelSerializer):
         fields = ['goalSettingsId']
 
 
-class UserWorkoutPreferencesSettingsSerializer(ModelSerializer):
+class UserWorkoutPreferencesSerializer(ModelSerializer):
     class Meta:
         model = UserWorkoutPreferences
         fields = ['workoutPreferencesId']
@@ -118,7 +118,7 @@ class UserDietaryPreferencesSerializer(ModelSerializer):
 class UserDetailsSerializer(ModelSerializer):
     UserHobbyData = UserHobbiesSerializer(many=True, read_only=True)
     UserGoalData = UserGoalSettingsSerializer(many=True, read_only=True)
-    UserWorkoutData = UserWorkoutPreferencesSettingsSerializer(many=True, read_only=True)
+    UserWorkoutData = UserWorkoutPreferencesSerializer(many=True, read_only=True)
     UserDietaryData = UserDietaryPreferencesSerializer(many=True, read_only=True)
 
     class Meta:
@@ -133,7 +133,7 @@ class UserDetailsSerializer(ModelSerializer):
 class UserSearchDetailsSerializer(ModelSerializer):
     UserHobbyData = UserHobbiesSerializer(many=True, read_only=True)
     UserGoalData = UserGoalSettingsSerializer(many=True, read_only=True)
-    UserWorkoutData = UserWorkoutPreferencesSettingsSerializer(many=True, read_only=True)
+    UserWorkoutData = UserWorkoutPreferencesSerializer(many=True, read_only=True)
     UserDietaryData = UserDietaryPreferencesSerializer(many=True, read_only=True)
 
     class Meta:
