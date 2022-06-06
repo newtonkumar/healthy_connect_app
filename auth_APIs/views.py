@@ -121,14 +121,69 @@ class UserRegistrationView(CreateAPIView):
 
             serializer = UserRegistrationSerializer(data=pythonData)
             if serializer.is_valid(raise_exception=True):
+                for hobbyId in userHobbies:
+                    userHobby = Hobbies.objects.filter(id=hobbyId).first()
+                    if userHobby:
+                        pass
+                    else:
+                        response = {
+                            "error": {
+                                "errorCode": 502,
+                                "statusCode": status.HTTP_404_NOT_FOUND,
+                                "errorMessage": "Hobby details not found, Registration aborted."
+                            },
+                            "response": None
+                        }
+                        return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                for goalId in userGoals:
+                    userGoalSetting = GoalSettings.objects.filter(id=goalId).first()
+                    if userGoalSetting:
+                        pass
+                    else:
+                        response = {
+                            "error": {
+                                "errorCode": 502,
+                                "statusCode": status.HTTP_404_NOT_FOUND,
+                                "errorMessage": "Goal Settings details not found, Registration aborted."
+                            },
+                            "response": None
+                        }
+                        return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                for workoutId in userWorkoutPreferences:
+                    userWorkoutPre = WorkoutPreferences.objects.filter(id=workoutId).first()
+                    if userWorkoutPre:
+                        pass
+                    else:
+                        response = {
+                            "error": {
+                                "errorCode": 502,
+                                "statusCode": status.HTTP_404_NOT_FOUND,
+                                "errorMessage": "Workout Preferences details not found, Registration aborted."
+                            },
+                            "response": None
+                        }
+                        return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                for dietId in userDietaryPreferences:
+                    userDietaryPre = DietaryPreferences.objects.filter(id=dietId).first()
+                    if userDietaryPre:
+                        pass
+                    else:
+                        response = {
+                            "error": {
+                                "errorCode": 502,
+                                "statusCode": status.HTTP_404_NOT_FOUND,
+                                "errorMessage": "Dietary Preferences details not found, Registration aborted."
+                            },
+                            "response": None
+                        }
+                        return Response(response, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
                 user = serializer.save()
                 if user is not None:
                     for hobbyId in userHobbies:
-                        userHobby = Hobbies.objects.filter(id=hobbyId).first()
                         UserHobbies.objects.create(userId=user, hobbyId=userHobby)
 
                     for goalId in userGoals:
-                        userGoalSetting = GoalSettings.objects.filter(id=goalId).first()
                         UserGoalSettings.objects.create(userId=user, goalSettingsId=userGoalSetting)
 
                     for dietPreId in userDietaryPreferences:
