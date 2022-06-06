@@ -129,3 +129,18 @@ class UserDetailsSerializer(ModelSerializer):
                   'UserWorkoutData', 'UserDietaryData'
                   ]
 
+
+class UserSearchDetailsSerializer(ModelSerializer):
+    UserHobbyData = UserHobbiesSerializer(many=True, read_only=True)
+    UserGoalData = UserGoalSettingsSerializer(many=True, read_only=True)
+    UserWorkoutData = UserWorkoutPreferencesSettingsSerializer(many=True, read_only=True)
+    UserDietaryData = UserDietaryPreferencesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'firstName', 'lastName', 'fullName', 'email', 'mobileNo', 'profileImage',
+                  'deviceType', 'gender', 'lat', 'lng', 'zipCode', 'dob', 'phoneNumberCountryCode', 'age',
+                  'activityLevel', 'height', 'currentWeight', 'goalWeight', 'UserHobbyData', 'UserGoalData',
+                  'UserWorkoutData', 'UserDietaryData'
+                  ]
+

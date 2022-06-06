@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, ListCreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import JSONParser
 import io
@@ -8,13 +8,14 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from auth_APIs.models import User, Hobbies, UserHobbies, GoalSettings, UserGoalSettings, \
     WorkoutPreferences, UserWorkoutPreferences, DietaryPreferences, UserDietaryPreferences
 from .serializers import UserRegistrationSerializer, HobbiesSerializer, GoalSettingsSerializer, \
-    WorkoutPreferencesSerializer, DietaryPreferencesSerializer, UserDetailsSerializer
+    WorkoutPreferencesSerializer, DietaryPreferencesSerializer, UserDetailsSerializer, UserSearchDetailsSerializer
 import pgeocode
 import math
 from django.db.models import Q
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
+from rest_framework import filters
 
 
 class UserRegistrationView(CreateAPIView):
@@ -418,3 +419,53 @@ class UserDetailsView(RetrieveAPIView):
             }
         }
         return Response(response, status=status.HTTP_200_OK)
+
+
+class UserSearchDetailsView(ListCreateAPIView):
+    permission_classes = (AllowAny,)
+
+    filter_backends = (filters.SearchFilter,)
+    queryset = User.objects.all()
+    serializer_class = UserSearchDetailsSerializer
+
+    def get(self, request):
+        try:
+            queryset = User.objects.all()
+            firstName = self.request.query_params.get('firstName', None)
+            lastName = self.request.query_params.get('lastName', None)
+            email = self.request.query_params.get('email', None)
+
+            if firstName is not None:
+                queryset = queryset.filter(firstName=firstName)
+
+            if lastName is not None:
+                queryset = queryset.filter(lastName=lastName)
+
+            if email is not None:
+                queryset = queryset.filter(email=email)
+
+            serializer = UserSearchDetailsSerializer(queryset, many=True)
+            response = {
+                    "error": None,
+                    "response": {
+                        "data": serializer.data,
+                        "message": {
+                            'success': True,
+                            "successCode": 102,
+                            "statusCode": status.HTTP_200_OK
+                        }
+                    }
+                }
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as exception:
+            response = {
+                "error": {
+                    "errorCode": 511,
+                    "statusCode": status.HTTP_400_BAD_REQUEST,
+                    "errorMessage": str(exception)
+                },
+                "response": None
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
